@@ -18,6 +18,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Patch AGP version
+        run: |
+            $file = "android\settings.gradle.kts"
+            (Get-Content $file) -replace 'com.android.application" version "[^"]*"', 'com.android.application" version "8.2.1"' |
+            Set-Content $file
+        shell: powershell
+
+
       - name: Get dependencies
         run: flutter pub get
 
