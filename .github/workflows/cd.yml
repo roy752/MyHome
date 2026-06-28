@@ -11,8 +11,8 @@ jobs:
 
     env:
       APP_VERSION: "1.0.0"
-      DEPLOY_PATH: "C:/A/B/C"
-      DOWNLOAD_BASE_URL: "https://example.com/releases"   # 실제 URL로 교체
+      DEPLOY_PATH: "C:\\Users\\User\\Desktop\\MineCraft\\FileServer_For_Resourcepack\\files\\myhome"
+      DOWNLOAD_BASE_URL: "http://100.108.137.1:11096"
 
     steps:
       - name: Checkout code
@@ -21,7 +21,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.0"
+          flutter-version: "3.44.4"
           channel: "stable"
 
       - name: Get dependencies
@@ -35,13 +35,13 @@ jobs:
           if (-not (Test-Path "$env:DEPLOY_PATH")) {
             New-Item -ItemType Directory -Path "$env:DEPLOY_PATH" -Force
           }
-        shell: pwsh
+        shell: powershell
 
       - name: Copy binary to deploy path
         run: |
           $src = "build\windows\x64\runner\Release\myhome.exe"
           Copy-Item -Path $src -Destination "$env:DEPLOY_PATH\myhome.exe" -Force
-        shell: pwsh
+        shell: powershell
 
       - name: Generate metadata JSON
         run: |
@@ -50,7 +50,7 @@ jobs:
             -BinaryPath "$env:DEPLOY_PATH\myhome.exe" `
             -DownloadBaseUrl "$env:DOWNLOAD_BASE_URL" `
             -OutputPath "$env:DEPLOY_PATH\metadata.json"
-        shell: pwsh
+        shell: powershell
 
       - name: Print deployed files
         run: |
@@ -58,4 +58,4 @@ jobs:
           Get-ChildItem "$env:DEPLOY_PATH"
           Write-Host "=== metadata.json content ==="
           Get-Content "$env:DEPLOY_PATH\metadata.json"
-        shell: pwsh
+        shell: powershell
